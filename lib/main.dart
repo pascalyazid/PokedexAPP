@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutterprojectzli/middleware/dataHandler.dart';
-import 'package:flutterprojectzli/pages/pokemonListPage.dart';
+import 'package:flutterprojectzli/middleware/DataHandler.dart';
+import 'package:flutterprojectzli/pages/PokemonListPage.dart';
 
 void main() {
   runApp(PokedexApp());
@@ -20,5 +20,5 @@ class PokedexApp extends StatelessWidget {
       ),
       home: const PokemonListPage(),
     );
-  }
+  } 
 }

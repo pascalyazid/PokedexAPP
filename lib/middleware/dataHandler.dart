@@ -5,14 +5,18 @@ import 'package:flutterprojectzli/model/pokemon.dart';
 import 'package:http/http.dart' as http;
 
 class DataHandler {
-  Future<List<Pokemon>?> listPokemons(
-      int offset, int limit, List<Pokemon> old) async {
+  Future<List<Pokemon>> listPokemons(
+    int offset,
+    int limit,
+  ) async {
+    Map<String, dynamic> data;
+    List<Pokemon> pokemon = List.empty();
     try {
       var url = Uri.parse(
           'https://pokeapi.co/api/v2/pokemon?offset=$offset&limit=$limit');
       var response = await http.get(url);
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body.toString());
+        data = jsonDecode(response.body.toString());
 
         List<Map<String, dynamic>> results = (data['results'] as List)
             .map((result) => {
@@ -21,18 +25,18 @@ class DataHandler {
                 })
             .toList();
 
-        List<Pokemon> _pokemon = pokemonFromJson(json.encode(results));
-        setSprites(_pokemon);
-        return old + _pokemon;
+        pokemon = pokemonFromJson(json.encode(results));
+        setSprites(pokemon);
+        return pokemon;
       } else {
         log("Couldn't retrieve data");
       }
     } catch (e) {
       log("Error retrieving data");
       log(e.toString());
-      return null;
+      return pokemon;
     }
-    return null;
+    return pokemon;
   }
 
   Future<List<Pokemon>?> setSprites(List<Pokemon> pokemons) async {
@@ -55,9 +59,9 @@ class DataHandler {
   }
 
   Future<Map<String, dynamic>> getPokemon(String uri) async {
-    Map<String, dynamic> data = Map();
+    Map<String, dynamic> data = {};
     try {
-      var completer = new Completer();
+      var completer = Completer();
       var url = Uri.parse(uri);
       var response = await http.get(url);
       if (response.statusCode == 200) {

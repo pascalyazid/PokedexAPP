@@ -1,11 +1,10 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterprojectzli/middleware/dataHandler.dart';
+import 'package:flutterprojectzli/middleware/DataHandler.dart';
 import 'package:flutterprojectzli/model/pokemon.dart';
-import 'package:flutterprojectzli/pages/pokemonDetailsPage.dart';
+import 'package:flutterprojectzli/pages/PokemonDetailsPage.dart';
 import 'package:shake/shake.dart';
 
 class PokemonListPage extends StatefulWidget {
@@ -18,20 +17,19 @@ class PokemonListPage extends StatefulWidget {
 class _PokemonListPageState extends State<PokemonListPage> {
   late int listOffset = 0;
   late ScrollController _scrollController;
-  late List<Pokemon>? _pokemon = [];
+  List<Pokemon> _pokemon = List.empty();
   late bool bottom = false;
   late Map<String, dynamic> pokemonData;
   @override
   void initState() {
-    ShakeDetector detector = ShakeDetector.autoStart(onPhoneShake: () {
+    ShakeDetector.autoStart(onPhoneShake: () {
       int index = Random().nextInt(952);
 
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (BuildContext context) => PokemonDetailsPage(
-                    url:
-                        "https://pokeapi.co/api/v2/pokemon/" + index.toString(),
+                    url: "https://pokeapi.co/api/v2/pokemon/$index",
                   )),
           ModalRoute.withName('/'));
     });
@@ -43,7 +41,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
 
   Future<void> getPokemonData(int index) async {
     Future<Map<String, dynamic>> futureData;
-    futureData = DataHandler().getPokemon(_pokemon![index].url);
+    futureData = DataHandler().getPokemon(_pokemon[index].url);
     pokemonData = await futureData;
   }
 
@@ -60,7 +58,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
   }
 
   Future<void> _getData() async {
-    _pokemon = (await DataHandler().listPokemons(listOffset, 8, _pokemon!))!;
+    _pokemon = _pokemon + (await DataHandler().listPokemons(listOffset, 8));
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
     //await Future.delayed(const Duration(seconds: 1));
     bottom = false;
@@ -74,7 +72,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
           backgroundColor: Colors.red,
           title: const Text("Pokemon List"),
         ),
-        body: _pokemon == null || _pokemon!.isEmpty
+        body: _pokemon == null || _pokemon.isEmpty
             ? const Center(
                 child: Column(
                   children: [Text("Empty")],
@@ -96,7 +94,7 @@ class _PokemonListPageState extends State<PokemonListPage> {
         return true;
       },
       child: ListView.builder(
-          itemCount: _pokemon!.length,
+          itemCount: _pokemon.length,
           itemBuilder: (context, index) {
             return Dismissible(
                 confirmDismiss: (direction) async {
@@ -106,34 +104,33 @@ class _PokemonListPageState extends State<PokemonListPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => PokemonDetailsPage(
-                                    url: _pokemon![index].url,
+                                    url: _pokemon[index].url,
                                   )));
                     });
                     return false;
                   }
+                  return null;
                 },
-                background: Container(
-                  child: const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 16),
-                      child: Icon(Icons.info),
-                    ),
+                background: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Icon(Icons.info),
                   ),
                 ),
-                key: Key(_pokemon![index].name),
+                key: Key(_pokemon[index].name),
                 child: Card(
                   child: Column(children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(_pokemon![index].name.toString()),
+                        Text(_pokemon[index].name.toString()),
                         CachedNetworkImage(
-                          imageUrl: _pokemon![index].spriteS.toString(),
+                          imageUrl: _pokemon[index].spriteS.toString(),
                           placeholder: (context, url) =>
-                              new CircularProgressIndicator(),
+                              const CircularProgressIndicator(),
                           errorWidget: (context, url, error) =>
-                              new Icon(Icons.error),
+                              const Icon(Icons.error),
                         ),
                       ],
                     )

@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 
-import '../middleware/dataHandler.dart';
+import '../middleware/DataHandler.dart';
 
 class PokemonDetailsPage extends StatefulWidget {
   const PokemonDetailsPage({super.key, required this.url});
@@ -16,7 +14,7 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
   final String url;
   bool loaded = false;
   bool loadingError = true;
-  Map<String, dynamic> _data = Map();
+  Map<String, dynamic> _data = {};
   _PokemonDetailsPageState({
     required this.url,
   });
@@ -57,19 +55,19 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
             return const Text('Connection Error');
           } else if (loaded) {
             return Center(
-              child: PokemonCard(context),
+              child: pokemonCard(context),
             );
           }
           return const Center(child: CircularProgressIndicator());
         }));
   }
 
-  Widget PokemonCard(BuildContext context) {
+  Widget pokemonCard(BuildContext context) {
     return Center(
       child: Card(
         elevation: 0,
         color: Colors.red,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           side: BorderSide(color: Colors.black),
           borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
@@ -91,13 +89,13 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                   height: 50,
                   child: Row(
                     children: [
-                      Text("Name:"),
-                      SizedBox(width: 10),
+                      const Text("Name:"),
+                      const SizedBox(width: 10),
                       Text(_data['name']),
                     ],
                   ),
                 ),
-                Row(
+                const Row(
                   children: [
                     Text("Types:"),
                     Spacer(),
@@ -105,61 +103,61 @@ class _PokemonDetailsPageState extends State<PokemonDetailsPage> {
                 ),
                 typeList(context, _data['types'].length),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("HP:"),
-                      Spacer(),
+                      const Text("HP:"),
+                      const Spacer(),
                       Text(_data['stats'][0]['base_stat'].toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("Attack:"),
-                      Spacer(),
+                      const Text("Attack:"),
+                      const Spacer(),
                       Text(_data['stats'][1]['base_stat'].toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("Defense:"),
-                      Spacer(),
+                      const Text("Defense:"),
+                      const Spacer(),
                       Text(_data['stats'][2]['base_stat'].toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("Special-Attack:"),
-                      Spacer(),
+                      const Text("Special-Attack:"),
+                      const Spacer(),
                       Text(_data['stats'][3]['base_stat'].toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("Special-Defense:"),
-                      Spacer(),
+                      const Text("Special-Defense:"),
+                      const Spacer(),
                       Text(_data['stats'][4]['base_stat'].toString())
                     ],
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                   child: Row(
                     children: [
-                      Text("Speed:"),
-                      Spacer(),
+                      const Text("Speed:"),
+                      const Spacer(),
                       Text(_data['stats'][5]['base_stat'].toString())
                     ],
                   ),
